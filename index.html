@@ -3,104 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - PisangKu</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="manifest" href="/manifest.json">
+  <title>PisangKu</title>
+  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#2e7d32">
+  <style>
+    body {
+      background: #f1f8e9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .loading-box {
+      text-align: center;
+      color: #2e7d32;
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-    <h1>PisangKu 🍌</h1>
-    <p>Monitoring Penanaman & Panen</p>
-  </header>
-
-  <main>
-    <div class="card">
-      <h3 id="formTitle">Masuk ke Akun</h3>
-      
-      <form id="authForm">
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="contoh@petani.com" required>
-        </div>
-
-        <div class="form-group">
-          <label for="password">Kata Sandi</label>
-          <input type="password" id="password" placeholder="Masukkan kata sandi" required>
-        </div>
-
-        <button type="submit" id="btnSubmit">Masuk</button>
-      </form>
-
-      <div style="margin-top: 1rem; text-align: center; font-size: 0.9rem;">
-        <span id="toggleText">Belum punya akun?</span>
-        <a href="#" id="toggleAuth" style="color: #2e7d32; font-weight: bold; text-decoration: none;">Daftar di sini</a>
-      </div>
-    </div>
-  </main>
+  <div class="loading-box">
+    <h2>Memuat PisangKu 🍌...</h2>
+  </div>
 
   <script type="module">
     import { auth } from './assets/js/firebase-config.js';
-    import { 
-      signInWithEmailAndPassword, 
-      createUserWithEmailAndPassword,
-      onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    let isLoginMode = true;
+    // Registrasi Service Worker & Update Cache
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+          reg.update(); // Paksa cek pembaruan file di GitHub Pages
+        });
+      });
+    }
 
-    const authForm = document.getElementById('authForm');
-    const formTitle = document.getElementById('formTitle');
-    const btnSubmit = document.getElementById('btnSubmit');
-    const toggleAuth = document.getElementById('toggleAuth');
-    const toggleText = document.getElementById('toggleText');
-
-    // Cek jika pengguna sudah login sebelumnya, langsung lempar ke dashboard
+    // Pengecekan Sesi Login
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        window.location.href = "pages/dashboard.html";
-      }
-    });
-
-    // Beralih antara mode Login dan Daftar
-    toggleAuth.addEventListener('click', (e) => {
-      e.preventDefault();
-      isLoginMode = !isLoginMode;
-
-      if (isLoginMode) {
-        formTitle.innerText = "Masuk ke Akun";
-        btnSubmit.innerText = "Masuk";
-        toggleText.innerText = "Belum punya akun?";
-        toggleAuth.innerText = "Daftar di sini";
+        window.location.replace("pages/dashboard.html");
       } else {
-        formTitle.innerText = "Buat Akun Baru";
-        btnSubmit.innerText = "Daftar";
-        toggleText.innerText = "Sudah punya akun?";
-        toggleAuth.innerText = "Masuk di sini";
-      }
-    });
-
-    // Proses Submit Login / Daftar
-    authForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      btnSubmit.disabled = true;
-      btnSubmit.innerText = "Memproses...";
-
-      try {
-        if (isLoginMode) {
-          await signInWithEmailAndPassword(auth, email, password);
-        } else {
-          await createUserWithEmailAndPassword(auth, email, password);
-        }
-        window.location.href = "pages/dashboard.html";
-      } catch (error) {
-        alert("Terjadi kesalahan: " + error.message);
-        btnSubmit.disabled = false;
-        btnSubmit.innerText = isLoginMode ? "Masuk" : "Daftar";
+        window.location.replace("pages/login.html");
       }
     });
   </script>
