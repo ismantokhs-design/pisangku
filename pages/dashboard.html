@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beranda - PisangKu</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#2e7d32">
+</head>
+<body>
+
+  <!-- Header Dashboard Modern -->
+  <header class="dashboard-header">
+    <div class="header-title">
+      <h1>Selamat Datang ☀️</h1>
+      <p id="namaKebun">BUMKal Sinar Mitra Desa</p>
+    </div>
+    
+    <div class="header-icons">
+      <button class="header-icon-btn" title="Cari">🔍</button>
+      
+      <div class="profile-dropdown-container">
+        <button class="header-icon-btn" id="profileBtn" title="Profil">👤</button>
+        <div class="profile-dropdown" id="dropdownMenu">
+          <button class="dropdown-item" id="changePassBtn">🔒 Ubah Password</button>
+          <button class="dropdown-item logout" id="logoutBtn">🚪 Keluar</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Modal Ubah Password -->
+  <div class="modal-overlay" id="changePassModal">
+    <div class="modal-content">
+      <h3>Ubah Kata Sandi</h3>
+      <form id="changePassForm">
+        <div class="form-group">
+          <label for="newPassword" style="font-size: 0.85rem;">Kata Sandi Baru</label>
+          <input type="password" id="newPassword" placeholder="Minimal 6 karakter" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="modal-btn cancel" id="cancelModalBtn" style="border-radius: 8px;">Batal</button>
+          <button type="submit" class="modal-btn" id="savePasswordBtn">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <main>
+    <!-- Banner Estimasi Panen -->
+    <section class="harvest-banner">
+      <div class="banner-content">
+        <h2>Estimasi<br>Panen: 30 Hari</h2>
+        <p>Berdasarkan perkembangan Fase Generatif rata-rata.</p>
+      </div>
+      <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&q=80&w=300" alt="Banana Tree" class="banner-illus">
+    </section>
+
+    <!-- Baris Statistik -->
+    <section class="stats-row">
+      <div class="stat-card">
+        <div class="stat-info">
+          <p>Total Tanaman</p>
+          <strong id="totalPohon">0</strong>
+        </div>
+        <div class="stat-icon">✅</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <p>Siap Panen</p>
+          <strong id="siapPanen">0</strong>
+        </div>
+        <div class="stat-icon siap">🍌</div>
+      </div>
+    </section>
+
+    <!-- Grafik Fase Pertumbuhan Interaktif -->
+    <section class="dashboard-card">
+      <div class="card-title-row">
+        <h3>Fase Pertumbuhan</h3>
+        <span class="card-badge">Aktif</span>
+      </div>
+      <div class="growth-timeline">
+        <svg viewBox="0 0 340 100" style="width: 100%; height: auto; overflow: visible;">
+          <path d="M 10,60 C 50,15 90,85 130,65 C 170,45 210,15 250,45 C 270,55 300,55 320,60" fill="none" stroke="#8bc34a" stroke-width="3" />
+          <path d="M 10,60 C 50,15 90,85 130,65 C 170,45 210,15 250,45 C 270,55 300,55 320,60" fill="none" stroke="#2e7d32" stroke-width="3" stroke-dasharray="8 4" />
+          
+          <circle cx="15" cy="55" r="5" fill="#2e7d32" />
+          <text x="15" y="42" font-size="9" font-weight="700" fill="#2e7d32" text-anchor="middle">Tanam</text>
+          
+          <circle cx="95" cy="65" r="5" fill="#2e7d32" />
+          <text x="95" y="80" font-size="9" font-weight="700" fill="#2e7d32" text-anchor="middle">Vegetatif</text>
+          
+          <circle cx="215" cy="23" r="5" fill="#2e7d32" />
+          <text x="215" y="12" font-size="9" font-weight="700" fill="#2e7d32" text-anchor="middle">Generatif</text>
+          
+          <circle cx="310" cy="58" r="6" fill="#fdd835" />
+          <text x="310" y="47" font-size="10" font-weight="800" fill="#2e7d32" text-anchor="middle">Panen 🍌</text>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Pekerjaan Hari Ini -->
+    <section class="dashboard-card">
+      <div class="card-title-row">
+        <h3>Pekerjaan Hari Ini</h3>
+        <span class="card-badge" style="background:#e8f5e9;">3 Tugas</span>
+      </div>
+      <div class="task-list">
+        <div class="task-item">
+          <div class="task-checkbox checked" onclick="toggleTask(this)">✓</div>
+          <span class="task-text done">Penyiraman kebun blok A</span>
+        </div>
+        <div class="task-item">
+          <div class="task-checkbox" onclick="toggleTask(this)"></div>
+          <span class="task-text">Pemberian pupuk kalium fase generatif</span>
+        </div>
+        <div class="task-item">
+          <div class="task-checkbox" onclick="toggleTask(this)"></div>
+          <span class="task-text">Pemeriksaan & pemotongan daun kering</span>
+        </div>
+      </div>
+      
+      <svg class="mini-chart" viewBox="0 0 300 60" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#8bc34a" stop-opacity="0.3"></stop>
+            <stop offset="100%" stop-color="#8bc34a" stop-opacity="0"></stop>
+          </linearGradient>
+        </defs>
+        <path d="M 0,40 Q 50,15 100,35 T 200,10 T 300,30 L 300,60 L 0,60 Z" fill="url(#chartGrad)"></path>
+        <path d="M 0,40 Q 50,15 100,35 T 200,10 T 300,30" fill="none" stroke="#4caf50" stroke-width="2"></path>
+      </svg>
+    </section>
+  </main>
+
+  <!-- Navigasi Bawah 5 Menu -->
+  <nav class="nav-bar">
+    <a href="dashboard.html" class="active">
+      <span class="icon">🏠</span>
+      <span>Beranda</span>
+    </a>
+    <a href="tanaman.html">
+      <span class="icon">🍌</span>
+      <span>Tanaman</span>
+    </a>
+    <a href="catatan.html">
+      <span class="icon">📝</span>
+      <span>Catatan</span>
+    </a>
+    <a href="laporan.html">
+      <span class="icon">📊</span>
+      <span>Laporan</span>
+    </a>
+    <a href="setting.html">
+      <span class="icon">⚙️</span>
+      <span>Setting</span>
+    </a>
+  </nav>
+
+  <script type="module">
+    import { auth } from '../assets/js/firebase-config.js';
+    import { ambilSemuaPohon } from '../assets/js/db.js';
+    import { signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    window.toggleTask = function(element) {
+      const isChecked = element.classList.toggle('checked');
+      element.innerHTML = isChecked ? '✓' : '';
+      
+      const textNode = element.nextElementSibling;
+      if (isChecked) {
+        textNode.classList.add('done');
+      } else {
+        textNode.classList.remove('done');
+      }
+    }
+
+    const profileBtn = document.getElementById('profileBtn');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    profileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownMenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', () => {
+      dropdownMenu.classList.remove('show');
+    });
+
+    const changePassBtn = document.getElementById('changePassBtn');
+    const changePassModal = document.getElementById('changePassModal');
+    const cancelModalBtn = document.getElementById('cancelModalBtn');
+    const changePassForm = document.getElementById('changePassForm');
+    const savePasswordBtn = document.getElementById('savePasswordBtn');
+
+    changePassBtn.addEventListener('click', () => {
+      changePassModal.classList.add('show');
+      dropdownMenu.classList.remove('show');
+    });
+
+    cancelModalBtn.addEventListener('click', () => {
+      changePassModal.classList.remove('show');
+      changePassForm.reset();
+    });
+
+    changePassForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const newPasswordValue = document.getElementById('newPassword').value;
+
+      if (newPasswordValue.length < 6) {
+        alert("Password baru minimal 6 karakter!");
+        return;
+      }
+
+      savePasswordBtn.disabled = true;
+      savePasswordBtn.innerText = "Memproses...";
+
+      try {
+        const user = auth.currentUser;
+        if (user) {
+          await updatePassword(user, newPasswordValue);
+          alert("Kata sandi berhasil diubah!");
+          changePassModal.classList.remove('show');
+          changePassForm.reset();
+        } else {
+          alert("Gagal mengubah kata sandi: Pengguna tidak terdeteksi. Silakan login ulang.");
+        }
+      } catch (error) {
+        alert("Gagal mengubah kata sandi: " + error.message);
+      } finally {
+        savePasswordBtn.disabled = false;
+        savePasswordBtn.innerText = "Simpan";
+      }
+    });
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click', async () => {
+      const confirmLogout = confirm("Apakah Anda yakin ingin keluar dari akun?");
+      if (confirmLogout) {
+        try {
+          await signOut(auth);
+          alert("Berhasil keluar!");
+          window.location.href = "login.html";
+        } catch (error) {
+          alert("Gagal keluar: " + error.message);
+        }
+      }
+    });
+
+    async function loadData() {
+      const data = await ambilSemuaPohon();
+      const totalEl = document.getElementById('totalPohon');
+      const siapPanenEl = document.getElementById('siapPanen');
+      
+      let total = 0;
+      let siapPanen = 0;
+
+      data.forEach(item => {
+        const jumlahPohon = Number(item.jumlah) || 1;
+        total += jumlahPohon;
+        
+        if (item.status && (item.status.toLowerCase() === 'panen' || item.status.toLowerCase() === 'generatif')) {
+          siapPanen += jumlahPohon;
+        }
+      });
+
+      totalEl.innerText = total;
+      siapPanenEl.innerText = siapPanen;
+    }
+
+    loadData();
+  </script>
+
+</body>
+</html>
