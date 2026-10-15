@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pisangku-v1';
+const CACHE_NAME = 'pisangku-v2';
 const urlsToCache = [
   './',
   './index.html',
